@@ -24,15 +24,18 @@ services:
     depends_on:
       - db
     ports:
-      # Expose scinote on host port 3534 -> container 3000
+      # Expose SciNote on 3534 on the host, 3000 in the container
       - "3534:3000"
     environment:
       RAILS_ENV: development
-      # Rails will also pick up DB info from POSTGRES_* but this is explicit:
       DATABASE_URL: postgres://postgres:mysecretpassword@db:5432/scinote_development
+      # 👇 allow EasyPanel proxy domains in Rails host auth
+      # This will match tes11-scinote.x9jlsv.easypanel.host and any other *.easypanel.host
+      RAILS_DEVELOPMENT_HOSTS: ".easypanel.host"
     command: >
       bash -c "rm -f /usr/src/app/tmp/pids/server.pid &&
                (bundle check || bundle install) &&
+               yarn install &&
                bundle exec rails s -b 0.0.0.0"
     volumes:
       - .:/usr/src/app
@@ -70,7 +73,7 @@ services:
     tty: true
     user: "0:0"
     command: >
-      bash -c "yarn build:css --watch"
+      bash -c "yarn install && yarn build:css --watch"
     environment:
       NODE_ENV: development
     volumes:
@@ -89,7 +92,7 @@ services:
     tty: true
     user: "0:0"
     command: >
-      bash -c "rails tailwindcss:watch"
+      bash -c "yarn install && rails tailwindcss:watch"
     environment:
       RAILS_ENV: development
       NODE_ENV: development
