@@ -31,7 +31,7 @@ services:
       DATABASE_URL: postgres://postgres:mysecretpassword@db:5432/scinote_development
       # 👇 allow EasyPanel proxy domains in Rails host auth
       # This will match tes11-scinote.x9jlsv.easypanel.host and any other *.easypanel.host
-      RAILS_DEVELOPMENT_HOSTS: ".easypanel.host"
+      RAILS_DEVELOPMENT_HOSTS: "tes11-scinote.x9jlsv.easypanel.host"
     command: >
       bash -c "rm -f /usr/src/app/tmp/pids/server.pid &&
                (bundle check || bundle install) &&
