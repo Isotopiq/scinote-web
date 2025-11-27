@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 'yQ3XvM8tN1pB6kF2wL9zR4cH7sV0dJ5a'
+      POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_DB: scinote_development
     volumes:
       - scinote_development_postgres:/var/lib/postgresql/data
@@ -28,17 +28,10 @@ services:
       - "3534:3000"
     environment:
       RAILS_ENV: development
-      DATABASE_URL: 'postgres://postgres:yQ3XvM8tN1pB6kF2wL9zR4cH7sV0dJ5a@db:5432/scinote_development'
-
-      # Strong Rails secrets (you can also move these into EasyPanel env UI if you prefer)
-      SECRET_KEY_BASE: 'f1f3c4a7b2d9487fb6c0d8b2e3e9a5f8d7c4a1e9b3f6c2d7a9c4b8e1f3d6a9c4f7d2b1e8c3a6d9b2e4f6c8a1b3d5e7f9'
-      PAPERCLIP_HASH_SECRET: '9c4f3a6d1b8e2f7c5d9a3b1e7f2c4d8a6b3e9f1c7d2a5b9e3f6c1d4a8b2e7c5f1a3d9b6c2e4f8a1b7d3c5e9f2a4b6d8'
-
-      # Host-related envs (only effective if wired in config)
-      RAILS_DEVELOPMENT_HOSTS: 'scinote.isotopiq.com'
-      APP_HOST: 'scinote.isotopiq.com'
-      # If you added a DISABLE_HOST_CHECK guard in development.rb, you can flip this:
-      # DISABLE_HOST_CHECK: 'true'
+      DATABASE_URL: postgres://postgres:mysecretpassword@db:5432/scinote_development
+      # 👇 allow EasyPanel proxy domains in Rails host auth
+      # This will match tes11-scinote.x9jlsv.easypanel.host and any other *.easypanel.host
+      RAILS_DEVELOPMENT_HOSTS: "scinote.isotopiq.com"
     command: >
       bash -c "rm -f /usr/src/app/tmp/pids/server.pid &&
                (bundle check || bundle install) &&
